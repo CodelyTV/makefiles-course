@@ -5,20 +5,19 @@ SHELL = /bin/sh
 build: composer/install
 
 # 🐘 Composer
-composer/create_env_file:
+create_env_file:
 	@if [ ! -f .env.local ]; then cp .env .env.local; fi
 
 composer/install: ACTION=install
 composer/update: ACTION=update
-composer/require: ACTION=require
-composer/require-module: ACTION=require $(module)
-composer composer/install composer/update composer/require composer/require-module: composer/create_env_file
+composer/require: ACTION=require $(module)
+composer composer/install composer/update composer/require: create_env_file
 	@docker run --rm $(INTERACTIVE) --volume $(current-dir):/app --user $(id -u):$(id -g) \
 		composer:2 $(ACTION) \
 			--ignore-platform-reqs \
 			--no-ansi
 
-test: composer/create_env_file
+test: create_env_file
 	docker exec codelytv_ddd_skeleton-mooc_backend ./vendor/bin/phpunit --testsuite mooc
 	docker exec codelytv_ddd_skeleton-mooc_backend ./vendor/bin/phpunit --testsuite shared
 	docker exec codelytv_ddd_skeleton-mooc_backend ./vendor/bin/behat -p mooc_backend --format=progress -v
@@ -29,7 +28,7 @@ start: CMD=up -d
 stop: CMD=stop
 destroy: CMD=down
 
-doco start stop destroy: composer/create_env_file
+doco start stop destroy: create_env_file
 	@docker-compose $(CMD)
 
 clean-cache:
