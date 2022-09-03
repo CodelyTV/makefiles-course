@@ -1,6 +1,9 @@
 current-dir := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SHELL = /bin/sh
 
+CURRENT_UID := $(shell id -u)
+CURRENT_GID := $(shell id -g)
+
 .PHONY: build
 build: composer/install
 
@@ -12,7 +15,7 @@ composer/install: ACTION=install
 composer/update: ACTION=update
 composer/require: ACTION=require $(module)
 composer composer/install composer/update composer/require: create_env_file
-	@docker run --rm $(INTERACTIVE) --volume $(current-dir):/app --user $(id -u):$(id -g) \
+	@docker run --rm $(INTERACTIVE) --volume $(current-dir):/app --user $(CURRENT_UID):$(CURRENT_GID) \
 		composer:2 $(ACTION) \
 			--ignore-platform-reqs \
 			--no-ansi
