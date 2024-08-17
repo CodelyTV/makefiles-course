@@ -21,7 +21,7 @@ stop: CMD=stop
 destroy: CMD=down
 
 doco start stop destroy:
-	@docker-compose $(CMD)
+	@docker compose $(CMD)
 
 clean-cache:
 	@rm -rf apps/*/*/var

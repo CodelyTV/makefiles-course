@@ -10,7 +10,7 @@ stop: CMD=stop
 destroy: CMD=down
 
 start stop destroy:
-	@docker-compose $(CMD)
+	@docker compose $(CMD)
 
 debug/start-mooc_backend:
 	@./gradlew :run --args='mooc_backend server'

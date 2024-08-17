@@ -29,7 +29,7 @@ stop: CMD=stop
 destroy: CMD=down
 
 doco start stop destroy: create_env_file
-	@docker-compose $(CMD)
+	@docker compose $(CMD)
 
 clean-cache:
 	@rm -rf apps/*/*/var
